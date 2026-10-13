@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TINTCOLOR 2010 - Archive des Tissus</title>
+    <style>
+        :root { --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; --accent-color: #4CAF50; --border-color: #333; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); }
+        
+        /* تنسيق صفحة الدخول */
+        #loginSection {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+        .login-box {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid var(--border-color);
+        }
+        .login-box h2 { color: var(--accent-color); margin-bottom: 20px; font-size: 1.8rem; }
+        .login-box .company-name { font-size: 1.2rem; font-weight: 800; color: #fff; letter-spacing: 2px; margin-bottom: 30px; text-transform: uppercase; background: linear-gradient(45deg, var(--accent-color), #81c784); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; background-color: #2a2a2a; color: #fff; border: 1px solid var(--border-color); border-radius: 4px; font-size: 1rem; transition: 0.3s; }
+        .login-box input:focus { outline: none; border-color: var(--accent-color); }
+        .login-box button { width: 100%; background-color: var(--accent-color); color: #fff; border: none; padding: 12px; font-size: 1.1rem; font-weight: bold; border-radius: 4px; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .login-box button:hover { background-color: #45a049; }
+        #loginError { color: #ff4c4c; margin-top: 15px; display: none; font-size: 0.9rem; }
+
+        /* تنسيق التطبيق الرئيسي */
+        #mainApp { display: none; padding: 20px; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        
+        header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); position: relative; }
+        .logout-btn { position: absolute; right: 0; top: 0; background-color: #ff4c4c; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .logout-btn:hover { background-color: #e60000; }
+        
+        .company-name-main { font-size: 1.3rem; font-weight: 800; color: #fff; letter-spacing: 3px; margin-bottom: 10px; text-transform: uppercase; background: linear-gradient(45deg, var(--accent-color), #81c784); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        header h1 { color: var(--text-color); margin-bottom: 5px; font-size: 1.8rem;}
+        .calidad-text { color: #888; font-weight: 400; font-size: 1.5rem; }
+        header p { color: #888; font-size: 0.9rem; }
+        
+        .form-container { background-color: var(--card-bg); padding: 20px; border-radius: 8px; margin-bottom: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; border: 1px solid var(--border-color); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .input-group { display: flex; flex-direction: column; }
+        .input-group label { margin-bottom: 5px; font-size: 0.9rem; color: #aaa; }
+        .input-group input { padding: 10px; background-color: #2a2a2a; color: #fff; border: 1px solid var(--border-color); border-radius: 4px; transition: 0.3s; }
+        .input-group input[type="file"] { padding: 7px; font-size: 0.85rem; cursor: pointer; }
+        .input-group input:focus { outline: none; border-color: var(--accent-color); }
+        
+        button.submit-btn { grid-column: 1 / -1; background-color: var(--accent-color); color: #fff; border: none; padding: 12px; font-size: 1rem; font-weight: bold; border-radius: 4px; cursor: pointer; transition: 0.3s; }
+        button.submit-btn:hover { background-color: #45a049; transform: translateY(-2px); }
+        button.submit-btn:disabled { background-color: #555; cursor: not-allowed; transform: none; }
+        
+        .search-container { margin-bottom: 20px; display: flex; }
+        .search-container input { width: 100%; padding: 12px; background-color: var(--card-bg); color: #fff; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; transition: 0.3s; }
+        .search-container input:focus { outline: none; border-color: var(--accent-color); }
+        
+        table { width: 100%; border-collapse: collapse; background-color: var(--card-bg); border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        th { background-color: #2a2a2a; color: var(--accent-color); }
+        tr:hover { background-color: #252525; }
+        
+        .flex-display { display: flex; align-items: center; gap: 12px; }
+        .table-img { width: 45px; height: 45px; object-fit: cover; border-radius: 4px; background-color: #fff; padding: 2px; cursor: pointer; transition: 0.3s; }
+        .table-img:hover { transform: scale(1.1); box-shadow: 0 0 8px rgba(255,255,255,0.2); }
+        .no-img { width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; background-color: #333; color: #888; border-radius: 4px; font-size: 0.7rem; }
+        
+        .action-buttons { display: flex; gap: 10px; }
+        .delete-btn { background-color: #ff4c4c; padding: 6px 12px; font-size: 0.85rem; border-radius: 4px; border: none; color: white; cursor: pointer; transition: 0.3s; }
+        .delete-btn:hover { background-color: #e60000; }
+        .edit-btn { background-color: #2196F3; padding: 6px 12px; font-size: 0.85rem; border-radius: 4px; border: none; color: white; cursor: pointer; transition: 0.3s; }
+        .edit-btn:hover { background-color: #0b7dda; }
+
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); }
+        .modal-content { margin: auto; display: block; max-width: 90%; max-height: 90vh; margin-top: 5vh; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .close-modal { position: absolute; top: 15px; right: 35px; color: #f1f1f1; font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .close-modal:hover { color: var(--accent-color); }
+
+        .toast { visibility: hidden; min-width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 1000; left: 50%; transform: translateX(-50%); bottom: 30px; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.5); opacity: 0; transition: opacity 0.5s, bottom 0.5s; }
+        .toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+        .toast.success { background-color: var(--accent-color); color: #121212; font-weight: bold; }
+        .toast.error { background-color: #ff4c4c; color: #fff; }
+
+        @media screen and (max-width: 768px) {
+            table, thead, tbody, th, td, tr { display: block; width: 100%; }
+            thead tr { display: none; }
+            tr { margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid var(--border-color); }
+            td { text-align: right; padding-left: 45%; position: relative; border-bottom: 1px solid #333; min-height: 50px; }
+            td::before { content: attr(data-label); position: absolute; left: 15px; width: 40%; text-align: left; font-weight: bold; color: var(--accent-color); top: 50%; transform: translateY(-50%); }
+            .flex-display { justify-content: flex-end; }
+            .action-buttons { justify-content: flex-end; }
+            td:last-child { border-bottom: none; }
+            .logout-btn { position: relative; display: block; margin-top: 15px; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- قسم تسجيل الدخول -->
+    <div id="loginSection">
+        <div class="login-box">
+            <div class="company-name">TINTCOLOR 2010</div>
+            <h2>Connexion</h2>
+            <input type="text" id="username" placeholder="Nom d'utilisateur">
+            <input type="password" id="password" placeholder="Mot de passe">
+            <button onclick="checkLogin()">Se connecter</button>
+            <p id="loginError">Identifiants incorrects. Veuillez réessayer.</p>
+        </div>
+    </div>
+
+    <!-- التطبيق الرئيسي (مخفي في البداية) -->
+    <div id="mainApp">
+        <div class="container">
+            <header>
+                <div class="company-name-main">TINTCOLOR 2010</div>
+                <h1>Archive des Tissus - <span class="calidad-text">CALIDAD TEJIDOS</span> 🧵</h1>
+                <p>Système Cloud Intelligent</p>
+                <button class="logout-btn" onclick="logout()">Déconnexion</button>
+            </header>
+
+            <div class="form-container" id="formSection">
+                <div class="input-group">
+                    <label>Logo de la marque (Laisser vide si pas de chgmt)</label>
+                    <input type="file" id="brandImage" accept="image/*">
+                </div>
+                <div class="input-group">
+                    <label>Marque</label>
+                    <input type="text" id="brand" placeholder="Ex: Zara man">
+                </div>
+                <div class="input-group">
+                    <label>Image de l'article (Laisser vide si pas de chgmt)</label>
+                    <input type="file" id="articleImage" accept="image/*">
+                </div>
+                <div class="input-group">
+                    <label>Série (Réf)</label>
+                    <input type="text" id="series" placeholder="Ex: Plis-28-cot...">
+                </div>
+                <div class="input-group">
+                    <label>Couleur</label>
+                    <input type="text" id="color" placeholder="Ex: black beauty">
+                </div>
+                <div class="input-group">
+                    <label>Date du Fichier</label>
+                    <input type="text" id="fileDate" placeholder="Ex: 13/10/2026">
+                </div>
+                <button id="saveBtn" class="submit-btn">Ajouter à l'archive</button>
+                <button id="cancelEditBtn" class="submit-btn" style="display:none; background-color:#555; margin-top:10px;">Annuler la modification</button>
+            </div>
+
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="🔍 Rechercher par marque, série ou couleur...">
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Marque</th>
+                        <th>Série & Article</th>
+                        <th>Couleur</th>
+                        <th>Date du Fichier</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- نافذة تكبير الصور -->
+    <div id="imageModal" class="modal">
+        <span class="close-modal">&times;</span>
+        <img id="modalImg" class="modal-content">
+    </div>
+
+    <!-- الإشعارات -->
+    <div id="toast" class="toast"></div>
+
+    <!-- كود التحقق من الدخول -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('isLoggedIn') === 'true') {
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+            }
+        });
+
+        function checkLogin() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            
+            if (user.toUpperCase() === 'ABDELALI' && pass === '010101') {
+                sessionStorage.setItem('isLoggedIn', 'true');
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                document.getElementById('loginError').style.display = 'none';
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('isLoggedIn');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('loginSection').style.display = 'flex';
+            document.getElementById('mainApp').style.display = 'none';
+        }
+
+        document.getElementById('password').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') checkLogin();
+        });
+    </script>
+
+    <!-- كود Firebase مدمج بمعلوماتك -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBI75DP72wAFNhvTb0N-VwsbQW9LdiB8qU",
+            authDomain: "archivetissus.firebaseapp.com",
+            projectId: "archivetissus",
+            storageBucket: "archivetissus.firebasestorage.app",
+            messagingSenderId: "597322504940",
+            appId: "1:597322504940:web:384548fb4bdc29794c23c9",
+            measurementId: "G-SVBSYJM6V2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+        let allRecords = [];
+        
+        let editingId = null;
+        let currentEditRecord = null;
+
+        function showToast(message, type="success") {
+            const toast = document.getElementById("toast");
+            toast.innerText = message;
+            toast.className = "toast show " + type;
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        async function uploadImage(file, folder) {
+            if (!file) return null;
+            const storageRef = ref(storage, `${folder}/${Date.now()}_${file.name}`);
+            await uploadBytes(storageRef, file);
+            return await getDownloadURL(storageRef);
+        }
+
+        document.getElementById('saveBtn').addEventListener('click', async () => {
+            const brand = document.getElementById('brand').value.trim();
+            const series = document.getElementById('series').value.trim();
+            const color = document.getElementById('color').value.trim();
+            const fileDate = document.getElementById('fileDate').value.trim();
+            const brandImageInput = document.getElementById('brandImage');
+            const articleImageInput = document.getElementById('articleImage');
+            const btn = document.getElementById('saveBtn');
+
+            if (brand === "" || series === "") {
+                showToast("Veuillez entrer au moins la marque et la série.", "error");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Chargement en cours... ⏳";
+
+            try {
+                if (editingId) {
+                    let finalBrandImg = currentEditRecord.brandImage;
+                    let finalArticleImg = currentEditRecord.articleImage;
+
+                    if (brandImageInput.files.length > 0) {
+                        finalBrandImg = await uploadImage(brandImageInput.files[0], 'logos');
+                    }
+                    if (articleImageInput.files.length > 0) {
+                        finalArticleImg = await uploadImage(articleImageInput.files[0], 'articles');
+                    }
+
+                    await updateDoc(doc(db, "tissus", editingId), {
+                        brand: brand,
+                        series: series,
+                        color: color,
+                        fileDate: fileDate,
+                        brandImage: finalBrandImg,
+                        articleImage: finalArticleImg
+                    });
+                    showToast("Fichier modifié avec succès !");
+                    resetForm();
+                } 
+                else {
+                    const brandImgUrl = await uploadImage(brandImageInput.files[0], 'logos');
+                    const articleImgUrl = await uploadImage(articleImageInput.files[0], 'articles');
+
+                    await addDoc(collection(db, "tissus"), {
+                        brand: brand,
+                        series: series,
+                        color: color,
+                        fileDate: fileDate,
+                        brandImage: brandImgUrl,
+                        articleImage: articleImgUrl,
+                        timestamp: Date.now()
+                    });
+                    showToast("Fichier ajouté à l'archive !");
+                    resetForm();
+                }
+            } catch (error) {
+                showToast("Erreur de connexion", "error");
+                console.error(error);
+            }
+
+            btn.disabled = false;
+        });
+
+        document.getElementById('cancelEditBtn').addEventListener('click', resetForm);
+
+        function resetForm() {
+            document.querySelectorAll('#formSection input').forEach(input => input.value = '');
+            editingId = null;
+            currentEditRecord = null;
+            document.getElementById('saveBtn').innerText = "Ajouter à l'archive";
+            document.getElementById('saveBtn').style.backgroundColor = "var(--accent-color)";
+            document.getElementById('cancelEditBtn').style.display = "none";
+        }
+
+        const q = query(collection(db, "tissus"), orderBy("timestamp", "desc"));
+        onSnapshot(q, (snapshot) => {
+            allRecords = [];
+            snapshot.forEach((doc) => {
+                allRecords.push({ id: doc.id, ...doc.data() });
+            });
+            renderTable(allRecords);
+        });
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const filtered = allRecords.filter(r => 
+                r.brand.toLowerCase().includes(query) || 
+                r.series.toLowerCase().includes(query) || 
+                r.color.toLowerCase().includes(query)
+            );
+            renderTable(filtered);
+        });
+
+        function renderTable(data) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = "";
+            data.forEach(record => {
+                const brandImg = record.brandImage ? `<img src="${record.brandImage}" class="table-img zoomable">` : `<div class="no-img">N/A</div>`;
+                const artImg = record.articleImage ? `<img src="${record.articleImage}" class="table-img zoomable">` : `<div class="no-img">N/A</div>`;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td data-label="Marque"><div class="flex-display">${brandImg} <span>${record.brand}</span></div></td>
+                    <td data-label="Série & Article"><div class="flex-display">${artImg} <strong>${record.series}</strong></div></td>
+                    <td data-label="Couleur">${record.color}</td>
+                    <td data-label="Date">${record.fileDate || '-'}</td>
+                    <td data-label="Action">
+                        <div class="action-buttons">
+                            <button class="edit-btn" data-id="${record.id}">Modifier</button>
+                            <button class="delete-btn" data-id="${record.id}">Supprimer</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    if(confirm("Êtes-vous sûr de vouloir supprimer ce fichier ?")) {
+                        await deleteDoc(doc(db, "tissus", e.target.getAttribute('data-id')));
+                        showToast("Fichier supprimé", "error");
+                    }
+                });
+            });
+
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    const record = allRecords.find(r => r.id === id);
+                    
+                    editingId = id;
+                    currentEditRecord = record;
+                    
+                    document.getElementById('brand').value = record.brand;
+                    document.getElementById('series').value = record.series;
+                    document.getElementById('color').value = record.color;
+                    document.getElementById('fileDate').value = record.fileDate || '';
+                    
+                    const saveBtn = document.getElementById('saveBtn');
+                    saveBtn.innerText = "Mettre à jour l'archive";
+                    saveBtn.style.backgroundColor = "#2196F3";
+                    document.getElementById('cancelEditBtn').style.display = "block";
+                    
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            });
+
+            const modal = document.getElementById("imageModal");
+            const modalImg = document.getElementById("modalImg");
+            
+            document.querySelectorAll('.zoomable').forEach(img => {
+                img.addEventListener('click', (e) => {
+                    modal.style.display = "block";
+                    modalImg.src = e.target.src;
+                });
+            });
+        }
+
+        document.querySelector('.close-modal').addEventListener('click', () => {
+            document.getElementById("imageModal").style.display = "none";
+        });
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById("imageModal");
+            if (e.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>
